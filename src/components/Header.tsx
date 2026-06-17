@@ -157,27 +157,7 @@ const Header = () => {
       )}
     </header>
 
-      {/* Navigation Links - Right Vertical (Desktop/Tablet) */}
-      <nav className="hidden md:flex fixed right-4 top-1/2 -translate-y-1/2 z-50 pointer-events-auto flex-col items-stretch gap-1 bg-background rounded-2xl px-2 py-2 shadow-lg border border-border">
-        {navItems.map((item) => (
-          <CoolMode key={item.name}>
-            <a
-              href={item.href}
-              onClick={() => setActiveTab(item.name)}
-              className={cn(
-                "px-3 py-2 rounded-full transition-all text-sm font-medium text-center flex items-center justify-center",
-                activeTab === item.name
-                  ? "bg-black text-white dark:bg-white dark:text-black shadow-md"
-                  : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
-              )}
-              title={item.name}
-              aria-label={item.name}
-            >
-              {item.icon}
-            </a>
-          </CoolMode>
-        ))}
-      </nav>
+
     </>
   );
 };
