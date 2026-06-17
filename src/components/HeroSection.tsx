@@ -67,8 +67,8 @@ const HeroSection = () => {
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-24 md:pt-28 lg:pt-32 px-4">
       {/* Background Text - behind image */}
-      <BackgroundLines className="absolute inset-0 z-0 pointer-events-none select-none -mt-32 md:mt-8 lg:mt-12">
-        <div className="flex flex-col items-center justify-center px-2 h-full">
+      <BackgroundLines className="absolute inset-0 z-0 pointer-events-none select-none -mt-24 md:-mt-8 lg:mt-0">
+        <div className="flex flex-col items-center justify-center px-2 h-full pt-0 -mt-10 md:pt-48 lg:pt-60">
           <h1 className="text-[4rem] sm:text-[6rem] md:text-[10rem] lg:text-[14rem] font-black leading-none tracking-tight text-hero-primary text-center dark:font-extrabold dark:tracking-[-0.02em]">
             Student
           </h1>
@@ -83,7 +83,7 @@ const HeroSection = () => {
         {/* First Paragraph - above image (all screens) */}
         <div className="flex flex-col items-center justify-center w-full max-w-4xl mx-auto -mt-8 md:mt-0 mb-2 md:mb-3">
           <p className="text-sm md:text-base lg:text-lg text-foreground leading-relaxed text-center">
-            3rd-year{" "}
+            Final Year{" "}
             <Highlighter action="underline" color="#ff0022">
               <span className="font-bold text-black dark:text-black">  Computer Science  </span>
             </Highlighter>
