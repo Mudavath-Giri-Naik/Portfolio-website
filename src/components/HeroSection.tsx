@@ -91,7 +91,7 @@ const HeroSection = () => {
             <Highlighter action="highlight" color="#16a34a">
               <span className="font-bold">  hackathons  </span>
             </Highlighter>
-            {", "}5K+ LinkedIn{" "}
+            {", "}6K+ LinkedIn{" "}
             <Highlighter action="highlight" color="#2563eb">
               <span className="font-bold">  followers  </span>
             </Highlighter>
