@@ -128,7 +128,7 @@ const VerticalConnector: React.FC<{ from: string; to: string; idx: number }> = (
   const gid = `jvc${idx}`;
   return (
     <div className="jconn" aria-hidden="true">
-      <svg width="180" height="80" viewBox="0 0 180 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg width="180" height="50" viewBox="0 0 180 80" fill="none" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <linearGradient id={gid} x1="0" y1="0" x2="0" y2="80" gradientUnits="userSpaceOnUse">
             <stop offset="0%" stopColor={from} stopOpacity="0.55" />
@@ -277,7 +277,7 @@ const JourneySection: React.FC = () => {
         /* Year band */
         .jband {
           position: relative; border-radius: 26px;
-          padding: 22px 26px 26px; margin-bottom: 6px; overflow: hidden;
+          padding: 22px 26px 26px; margin-bottom: 0; overflow: hidden;
         }
         .jband__deco { position: absolute; top: -16px; right: -12px; width: 120px; height: 120px; opacity: 0.07; transform: rotate(12deg); }
         .jband__sticker { position: absolute; top: 14px; right: 16px; width: 42px; z-index: 1; transform: rotate(8deg); opacity: 0.95; }
@@ -385,7 +385,7 @@ const JourneySection: React.FC = () => {
         /* ── Vertical connector ── */
         .jconn {
           display: flex; justify-content: center; align-items: center;
-          margin: 0px 0 2px;
+          margin: -4px 0 -4px;
         }
 
         /* ── Tablet ── */
@@ -417,7 +417,7 @@ const JourneySection: React.FC = () => {
           .evcard { flex: 0 0 calc(50% - 7px); min-width: 0; padding-top: 0; }
           .evcard::after { display: none; }
           .evcard__title { font-size: 13px; }
-          .jconn svg { width: 120px; height: 56px; }
+          .jconn svg { width: 100px; height: 38px; }
         }
       `}</style>
     </section>
