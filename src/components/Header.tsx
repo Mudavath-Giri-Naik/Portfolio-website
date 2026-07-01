@@ -1,4 +1,4 @@
-import { Menu, X, Mail, ArrowUpRight, FolderKanban, GitFork, BookOpenText, Award } from "lucide-react";
+import { Menu, X, Mail, ArrowUpRight, FolderKanban, GitFork, BookOpenText, Award, Route } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { RainbowButton } from "@/components/ui/rainbow-button";
 import { CoolMode } from "@/components/ui/cool-mode";
@@ -12,6 +12,7 @@ const Header = () => {
 
   const navItems = [
     { name: "Projects", href: "#projects", icon: <FolderKanban className="w-4 h-4" /> },
+    { name: "Journey", href: "#journey", icon: <Route className="w-4 h-4" /> },
     { name: "Open Source", href: "#open-source", icon: <GitFork className="w-4 h-4" /> },
     { name: "Blogs", href: "#blogs", icon: <BookOpenText className="w-4 h-4" /> },
     { name: "Certifications", href: "#certifications", icon: <Award className="w-4 h-4" /> },
