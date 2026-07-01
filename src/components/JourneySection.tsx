@@ -57,61 +57,46 @@ const typeMeta: Record<EventType, { icon: React.ReactNode; color: string; light:
   certificate: { icon: <IconCertificate size={13} />, color: "#6366f1", light: "#eef0ff" },
 };
 
-/* placeholder pool → swap each with your real certificate / screenshot */
-const imgPool = [
-  "/images/aifor.jpeg",
-  "/images/creators.jpeg",
-  "/images/wehub.jpeg",
-  "/images/learn.png",
-  "/images/image.png",
-  "/images/1760863321410.jpeg",
-  "/techmates.png",
-  "/ambox.png",
-  "/naik.jpeg",
-  "/hug.png",
-  "/girish.png",
-];
-const ph = (seed: string) => imgPool[(parseInt(seed.split("-")[1], 10) - 1) % imgPool.length];
-
 const years: Year[] = [
   {
     no: "1", label: "First Year", hand: "where it all began", range: "2023 – 2024",
     status: "done", accent: "#6366f1", tint: "#eff1ff", deco: "Misc_02.svg", sticker: "33.svg",
     events: [
-      { month: "Aug 2023", title: "Started B.Tech", type: "milestone", img: ph("giri-1") },
-      { month: "Nov 2023", title: "First Hackathon", type: "hackathon", img: ph("giri-2") },
-      { month: "Feb 2024", title: "Web Dev Workshop", type: "event", img: ph("giri-3") },
-      { month: "Apr 2024", title: "Coding Contest", type: "achievement", img: ph("giri-4") },
+      { month: "Aug 2023", title: "Started B.Tech CSE",         type: "milestone",     img: "/images/IMG_20241209_075612~2.jpg" },
+      { month: "Nov 2023", title: "Buildathon – RITH Vizag",    type: "hackathon",     img: "/images/1760863321410.jpeg"         },
+      { month: "Jan 2024", title: "DSA Competition Prize",      type: "achievement",   img: "/images/learn.png"                  },
+      { month: "Apr 2024", title: "Devfest 2024 – GDG Vizag",  type: "event",         img: "/images/image.png"                  },
     ],
   },
   {
     no: "2", label: "Second Year", hand: "finding my stride", range: "2024 – 2025",
     status: "done", accent: "#10b981", tint: "#eafaf2", deco: "Misc_03.svg", sticker: "10.svg",
     events: [
-      { month: "Jul 2024", title: "24-Hour Hackathon", type: "hackathon", img: ph("giri-5") },
-      { month: "Oct 2024", title: "Open Source", type: "participation", img: ph("giri-6") },
-      { month: "Jan 2025", title: "Guest Session", type: "invitation", img: ph("giri-7") },
-      { month: "Mar 2025", title: "Techmates Launch", type: "launch", img: ph("giri-8") },
+      { month: "Aug 2024", title: "Meeting Developers",         type: "participation", img: "/images/IMG_20241208_172556~2.jpg"  },
+      { month: "Dec 2024", title: "Networking Events",          type: "event",         img: "/images/IMG_20250823_195228.jpg"    },
+      { month: "Feb 2025", title: "AI for Vizag Meetup",        type: "event",         img: "/images/aifor.jpeg"                 },
+      { month: "Apr 2025", title: "Techmates Team",             type: "launch",        img: "/images/IMG_20250914_084343.jpg"    },
     ],
   },
   {
     no: "3", label: "Third Year", hand: "going all-in on AI", range: "2025 – 2026",
     status: "done", accent: "#ec4899", tint: "#fdeef6", deco: "Misc_01.svg", sticker: "50.svg",
     events: [
-      { month: "Jun 2025", title: "AI Hackathon", type: "hackathon", img: ph("giri-9") },
-      { month: "Sep 2025", title: "Intentify Released", type: "launch", img: ph("giri-10") },
-      { month: "Dec 2025", title: "Tech Talk", type: "invitation", img: ph("giri-11") },
-      { month: "Mar 2026", title: "Doxy Released", type: "achievement", img: ph("giri-12") },
+      { month: "Jul 2025", title: "Hackathon – VIIT Vizag",     type: "hackathon",     img: "/images/IMG_20250914_030725.jpg"    },
+      { month: "Aug 2025", title: "Building Connections",       type: "participation", img: "/images/IMG_20250914_035115.jpg"    },
+      { month: "Sep 2025", title: "Tech Influencer",            type: "invitation",    img: "/images/IMG_20250927_191458~2.jpg"  },
+      { month: "Sep 2025", title: "Creators Summit – T-Hub",   type: "event",         img: "/images/IMG_20250928_175548.jpg"    },
+      { month: "Nov 2025", title: "OpenMic – WeHub Hyd",        type: "invitation",    img: "/images/wehub.jpeg"                 },
     ],
   },
   {
     no: "4", label: "Final Year", hand: "the home stretch", range: "2026 – 2027",
     status: "current", accent: "#f59e0b", tint: "#fff6e6", deco: "Misc_05.svg", sticker: "90.svg",
     events: [
-      { month: "Jul 2026", title: "Final Year Begins", type: "milestone", img: ph("giri-13") },
-      { month: "Soon", title: "Internship", type: "internship", img: ph("giri-14"), upcoming: true },
-      { month: "Soon", title: "Capstone Project", type: "event", img: ph("giri-15"), upcoming: true },
-      { month: "2027", title: "Graduation", type: "certificate", img: ph("giri-16"), upcoming: true },
+      { month: "Jan 2026", title: "Tech Influencers Meet",      type: "participation", img: "/images/IMG_20250927_191626.jpg"    },
+      { month: "Mar 2026", title: "Panel – Creators Summit",    type: "invitation",    img: "/images/creators.jpeg"              },
+      { month: "May 2026", title: "SDE – Student Tribe Hyd",    type: "internship",    img: "/images/IMG_20250929_161411~2.jpg"  },
+      { month: "Jul 2026", title: "Founded Student Tribe",      type: "milestone",     img: "/images/IMG_20250929_163728~2.jpg"  },
     ],
   },
 ];
@@ -138,8 +123,49 @@ const EventCard: React.FC<{ ev: JEvent }> = ({ ev }) => {
   );
 };
 
+/* ─── Vertical connector between year bands ─── */
+const VerticalConnector: React.FC<{ from: string; to: string; idx: number }> = ({ from, to, idx }) => {
+  const gid = `jvc${idx}`;
+  return (
+    <div className="jconn" aria-hidden="true">
+      <svg width="180" height="80" viewBox="0 0 180 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id={gid} x1="0" y1="0" x2="0" y2="80" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stopColor={from} stopOpacity="0.55" />
+            <stop offset="100%" stopColor={to} stopOpacity="0.55" />
+          </linearGradient>
+        </defs>
+        {/* Main S-curve */}
+        <path d="M 90 0 C 28 26, 152 54, 90 80"
+              stroke={`url(#${gid})`} strokeWidth="1.6"
+              strokeDasharray="5 4.5" strokeLinecap="round" />
+        {/* Ghost echo curve for depth */}
+        <path d="M 78 1 C 20 26, 140 54, 80 79"
+              stroke={from} strokeWidth="0.8" opacity="0.13"
+              strokeDasharray="3 7" strokeLinecap="round" />
+        {/* Top dot */}
+        <circle cx="90" cy="5" r="5" fill={from} opacity="0.18" />
+        <circle cx="90" cy="5" r="2.5" fill={from} opacity="0.65" />
+        {/* Diamond ornament at midpoint */}
+        <g transform="translate(90 40)">
+          <path d="M 0 -8 L 7 0 L 0 8 L -7 0 Z" fill={from} opacity="0.1" />
+          <path d="M 0 -8 L 7 0 L 0 8 L -7 0 Z" stroke={to} strokeWidth="1.1" opacity="0.35" fill="none" />
+          <circle r="3" fill="white" />
+          <circle r="1.8" fill={to} opacity="0.7" />
+        </g>
+        {/* Small waypoint pips */}
+        <circle cx="64" cy="22" r="2" fill={from} opacity="0.3" />
+        <circle cx="116" cy="58" r="2" fill={to} opacity="0.3" />
+        {/* Bottom dot */}
+        <circle cx="90" cy="75" r="5" fill={to} opacity="0.18" />
+        <circle cx="90" cy="75" r="2.5" fill={to} opacity="0.65" />
+      </svg>
+    </div>
+  );
+};
+
 /* ─── Year chapter ─── */
-const Chapter: React.FC<{ year: Year; index: number; last: boolean }> = ({ year, index, last }) => {
+const Chapter: React.FC<{ year: Year; index: number; last: boolean; nextAccent?: string }> = ({ year, index, last, nextAccent }) => {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-70px" });
 
@@ -180,10 +206,8 @@ const Chapter: React.FC<{ year: Year; index: number; last: boolean }> = ({ year,
         </div>
       </motion.div>
 
-      {!last && (
-        <div className="jconnector" aria-hidden="true">
-          <Doodle src="Arrow_03.svg" className="jconnector__arrow" />
-        </div>
+      {!last && nextAccent && (
+        <VerticalConnector from={year.accent} to={nextAccent} idx={index} />
       )}
     </>
   );
@@ -214,7 +238,7 @@ const JourneySection: React.FC = () => {
         </motion.div>
 
         {years.map((y, i) => (
-          <Chapter key={y.label} year={y} index={i} last={i === years.length - 1} />
+          <Chapter key={y.label} year={y} index={i} last={i === years.length - 1} nextAccent={years[i + 1]?.accent} />
         ))}
       </div>
 
@@ -280,10 +304,53 @@ const JourneySection: React.FC = () => {
 
         /* Event grid */
         .jgrid {
-          display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
-          position: relative; z-index: 2;
+          display: flex; flex-wrap: nowrap; gap: 16px;
+          overflow-x: auto; position: relative; z-index: 2;
+          scrollbar-width: none; -ms-overflow-style: none;
+          scroll-snap-type: x mandatory;
+          -webkit-overflow-scrolling: touch;
+          overscroll-behavior-x: contain;
         }
-        .evcard { display: flex; flex-direction: column; }
+        .jgrid::-webkit-scrollbar { display: none; }
+
+        /* ── Horizontal timeline line ── */
+        .jgrid::before {
+          content: '';
+          position: absolute;
+          left: 0; right: 0; top: 10px;
+          height: 1.5px;
+          background: linear-gradient(90deg,
+            transparent 0px,
+            var(--accent) 30px,
+            var(--accent) calc(100% - 30px),
+            transparent 100%);
+          opacity: 0.2;
+          pointer-events: none;
+          z-index: 0;
+        }
+
+        .evcard {
+          flex: 0 0 calc(25% - 12px); min-width: 130px;
+          display: flex; flex-direction: column;
+          scroll-snap-align: start;
+          position: relative;
+          padding-top: 22px;
+        }
+
+        /* ── Timeline dot per card ── */
+        .evcard::after {
+          content: '';
+          position: absolute;
+          top: 4px; left: 50%;
+          transform: translateX(-50%);
+          width: 12px; height: 12px;
+          border-radius: 50%;
+          background: var(--accent);
+          border: 2.5px solid rgba(255,255,255,0.95);
+          box-shadow: 0 0 0 3.5px color-mix(in srgb, var(--accent) 22%, transparent);
+          opacity: 0.72;
+          z-index: 3;
+        }
 
         /* professional matte frame */
         .evcard__frame {
@@ -315,16 +382,19 @@ const JourneySection: React.FC = () => {
         .evcard__title { margin: 11px 2px 0; font-size: 13.5px; font-weight: 750; letter-spacing: -0.01em; color: #18181b; line-height: 1.25; }
         .evcard__month { margin: 3px 2px 0; font-size: 11px; font-weight: 600; color: #8a8a93; font-variant-numeric: tabular-nums; }
 
-        /* Connector */
-        .jconnector { display: flex; justify-content: center; margin: 2px 0 8px; }
-        .jconnector__arrow { width: 40px; height: 40px; color: #c4c4cc; transform: rotate(118deg); opacity: 0.7; }
+        /* ── Vertical connector ── */
+        .jconn {
+          display: flex; justify-content: center; align-items: center;
+          margin: 0px 0 2px;
+        }
 
         /* ── Tablet ── */
         @media (min-width: 640px) and (max-width: 1023px) {
           .jsection { padding: 30px 22px 56px; }
           .jsection__title { font-size: 36px; }
           .jband { padding: 20px 20px 24px; }
-          .jgrid { grid-template-columns: repeat(3, 1fr); gap: 14px; }
+          .jgrid { gap: 14px; }
+          .evcard { flex: 0 0 calc(33.333% - 10px); }
         }
 
         /* ── Mobile ── */
@@ -342,9 +412,12 @@ const JourneySection: React.FC = () => {
           .jband__range { margin-left: 0; }
           .jband__sticker { width: 36px; top: 12px; right: 12px; }
 
-          .jgrid { grid-template-columns: repeat(2, 1fr); gap: 13px; }
+          .jgrid { flex-wrap: wrap; gap: 13px; }
+          .jgrid::before { display: none; }
+          .evcard { flex: 0 0 calc(50% - 7px); min-width: 0; padding-top: 0; }
+          .evcard::after { display: none; }
           .evcard__title { font-size: 13px; }
-          .jconnector__arrow { width: 32px; height: 32px; transform: rotate(128deg); }
+          .jconn svg { width: 120px; height: 56px; }
         }
       `}</style>
     </section>

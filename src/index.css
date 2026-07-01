@@ -131,6 +131,63 @@
   }
 }
 
+/* ── Global smooth scroll ── */
+html {
+  scroll-behavior: smooth;
+}
+
+/* ── Thin custom scrollbar ── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #d4d4d8; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: #a1a1aa; }
+
+/* ── Global keyframes ── */
+@keyframes hero-float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-14px); }
+}
+
+@keyframes pulse-ring {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(99,102,241,0.45); }
+  50% { box-shadow: 0 0 0 6px rgba(99,102,241,0); }
+}
+
+@keyframes slide-shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(8deg); }
+  25% { transform: rotate(15deg) scale(1.08); }
+  50% { transform: rotate(3deg); }
+  75% { transform: rotate(13deg) scale(1.04); }
+}
+
+@keyframes bounce-up {
+  0%   { transform: translateY(0) scale(1); }
+  40%  { transform: translateY(-7px) scale(1.12); }
+  70%  { transform: translateY(-3px) scale(1.06); }
+  100% { transform: translateY(0) scale(1); }
+}
+
+/* ── Hero float ── */
+.hero-float {
+  animation: hero-float 5.5s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .hero-float { animation: none; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.15ms !important;
+  }
+}
+
 @layer components {
   .hero-text-primary {
     color: hsl(var(--hero-text-primary));

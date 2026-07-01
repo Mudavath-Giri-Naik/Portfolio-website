@@ -1,5 +1,5 @@
 import { Menu, X, Mail, ArrowUpRight, FolderKanban, GitFork, BookOpenText, Award, Route } from "lucide-react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { RainbowButton } from "@/components/ui/rainbow-button";
 import { CoolMode } from "@/components/ui/cool-mode";
 import { cn } from "@/lib/utils";
@@ -8,6 +8,7 @@ const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("");
   const [isVisible, setIsVisible] = useState(true);
+  const [scrollProgress, setScrollProgress] = useState(0);
   const lastScrollY = useRef(0);
 
   const navItems = [
@@ -54,6 +55,10 @@ const Header = () => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
 
+      // Scroll progress
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      setScrollProgress(docHeight > 0 ? (currentScrollY / docHeight) * 100 : 0);
+
       // Determine visibility based on scroll direction
       if (currentScrollY > lastScrollY.current && currentScrollY > 80) {
         setIsVisible(false); // Scrolling down -> hide
@@ -78,7 +83,19 @@ const Header = () => {
 
   return (
     <>
-      <header 
+      {/* ── Scroll progress bar ── */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: "fixed", top: 0, left: 0,
+          height: 2, zIndex: 9999, pointerEvents: "none",
+          width: `${scrollProgress}%`,
+          background: "linear-gradient(90deg,#6366f1,#06b6d4,#f59e0b)",
+          transition: "width 0.08s linear",
+          borderRadius: "0 2px 2px 0",
+        }}
+      />
+      <header
       className={cn(
         "fixed top-0 left-0 right-0 z-40 flex items-center justify-between py-4 px-4 md:px-6 md:pointer-events-none transition-transform duration-300 ease-in-out",
         isVisible ? "translate-y-0" : "-translate-y-full"
