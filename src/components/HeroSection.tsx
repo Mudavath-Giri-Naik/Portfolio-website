@@ -65,7 +65,7 @@ const HeroSection = () => {
   ];
 
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-24 md:pt-28 lg:pt-32 px-4">
+    <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-8 md:pt-28 lg:pt-32 px-4">
       {/* Background Text - behind image */}
       <BackgroundLines className="absolute inset-0 z-0 pointer-events-none select-none -mt-24 md:-mt-8 lg:mt-0">
         <div className="flex flex-col items-center justify-center px-2 h-full pt-0 -mt-10 md:pt-48 lg:pt-60">

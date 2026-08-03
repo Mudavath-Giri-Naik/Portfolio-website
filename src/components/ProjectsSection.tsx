@@ -50,6 +50,13 @@ const SVG = {
   u1: "/svgs/Underline_01.svg", u3: "/svgs/Underline_03.svg",
   u5: "/svgs/Underline_05.svg", u7: "/svgs/Underline_07.svg",
   u9: "/svgs/Underline_09.svg", u2: "/svgs/Underline_02.svg",
+  u4: "/svgs/Underline_04.svg", u6: "/svgs/Underline_06.svg",
+  pulse:  "/svgs/pulse, heart rate,.svg",
+  circle: "/svgs/circle, round, mark, 30.svg",
+  loops:  "/svgs/shape, doodle, swirl, scribble, loops, 4.svg",
+  braces: "/svgs/braces, curly braces, symbol, open, character, filled.svg",
+  replay: "/svgs/arrow, hand drawn, scribble, doodle, reload, replay, 3.svg",
+  semi:   "/svgs/semicolon, colon, symbol, filled.svg",
 };
 
 /* ── Project data ── */
@@ -63,8 +70,32 @@ type Project = {
 
 const projects: Project[] = [
   {
+    name: "SeatFlow", tagline: "Real-Time Booking Engine",
+    category: "Full Stack", year: "2026", platform: "web",
+    description: "A real-time seat booking system built for zero double-bookings — Redis locks, Postgres row-locking, WebSocket live updates, and full CI/CD.",
+    github: "https://github.com/Mudavath-Giri-Naik/SeatFlow.git",
+    live: "https://seat-flow-lac.vercel.app",
+    accent: "#dc2626",
+    gradient: "linear-gradient(140deg,#fee2e2 0%,#fca5a5 50%,#f87171 100%)",
+    ink: "#991b1b",
+    tags: ["Full Stack", "For Venues"],
+    dA: SVG.pulse, dB: SVG.circle, misc: SVG.loops, underline: SVG.u4,
+  },
+  {
+    name: "AutoML-Forge", tagline: "End-to-End AutoML Platform",
+    category: "Machine Learning", year: "2026", platform: "web",
+    description: "An end-to-end AutoML platform — upload a CSV, watch it train live on Azure ML, and get an explained, instantly-servable prediction endpoint.",
+    github: "https://github.com/Mudavath-Giri-Naik/AutoML-Forge.git",
+    live: "https://salmon-island-0c797df00.7.azurestaticapps.net/",
+    accent: "#ca8a04",
+    gradient: "linear-gradient(140deg,#fef9c3 0%,#fde047 50%,#facc15 100%)",
+    ink: "#854d0e",
+    tags: ["Machine Learning", "For Data Teams"],
+    dA: SVG.braces, dB: SVG.replay, misc: SVG.semi, underline: SVG.u6,
+  },
+  {
     name: "Intentify", tagline: "AI Assessment Generator",
-    category: "Generative AI", year: "2025", platform: "web",
+    category: "Generative AI", year: "2026", platform: "web",
     description: "Turns simple prompts into ready-to-use coding assessments for recruiters — powered by LLMs and structured evaluation.",
     github: "https://github.com/Mudavath-Giri-Naik/Intentify-v2",
     live: "https://intentify-v2.vercel.app/",
@@ -76,7 +107,7 @@ const projects: Project[] = [
   },
   {
     name: "Doxy", tagline: "AI Resume Editor",
-    category: "Generative AI", year: "2025", platform: "web",
+    category: "Generative AI", year: "2026", platform: "web",
     description: "An AI document editor — prepare your resume in seconds by pasting a JD and download instantly.",
     github: "https://github.com/Mudavath-Giri-Naik/Doxy.git",
     live: "https://doxy-two.vercel.app/",
@@ -88,7 +119,7 @@ const projects: Project[] = [
   },
   {
     name: "Techmates", tagline: "Campus Network App",
-    category: "Full Stack", year: "2024", platform: "android",
+    category: "Full Stack", year: "2026", platform: "android",
     description: "An all-in-one campus network app to discover internships, hackathons, events, and connect with students.",
     github: "https://github.com/Mudavath-Giri-Naik/Techmates.git",
     live: "https://play.google.com/store/apps/details?id=com.techmates.app",
@@ -124,7 +155,7 @@ const projects: Project[] = [
   },
   {
     name: "Engram", tagline: "Network Incident Memory",
-    category: "Dev Tool", year: "2025", platform: "web",
+    category: "Dev Tool", year: "2024", platform: "web",
     description: "A network-specific incident memory layer — remembers how issues were actually fixed, so hard-won fixes never leave with the engineer.",
     github: "https://github.com/Mudavath-Giri-Naik/Engram.git",
     live: "https://engram-self.vercel.app/",
