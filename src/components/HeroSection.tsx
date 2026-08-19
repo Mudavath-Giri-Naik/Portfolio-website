@@ -40,7 +40,7 @@ const HeroSection = () => {
       type: "leetcode",
       title: "LeetCode",
       iconPath: "/leetcode.png",
-      href: "https://leetcode.com/u/nayakhh/",
+      href: "https://leetcode.com/u/Mudavathgirinaik/",
     },
     {
       type: "vercel",
@@ -213,7 +213,7 @@ const HeroSection = () => {
         <SocialIcon type="email" url="https://example.com/email" />
         <SocialIcon type="kaggle" url="https://example.com/kaggle" />
         <SocialIcon type="huggingface" url="https://example.com/huggingface" />
-        <SocialIcon type="leetcode" url="https://example.com/leetcode" />
+        <SocialIcon type="leetcode" url="https://leetcode.com/u/Mudavathgirinaik/" />
         <SocialIcon type="vercel" url="https://example.com/vercel" />
         <SocialIcon type="render" url="https://example.com/render" />
         <SocialIcon type="twitter" url="https://example.com/twitter" />
