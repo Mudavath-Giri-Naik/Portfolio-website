@@ -70,6 +70,42 @@ type Project = {
 
 const projects: Project[] = [
   {
+    name: "Tally", tagline: "AI Payment Recovery Agent",
+    category: "AI Agent", year: "2026", platform: "web",
+    description: "An AI revenue-recovery agent for Razorpay merchants — classifies why a payment failed and recovers it over email, WhatsApp, or voice, guardrailed by code, not the prompt.",
+    github: "https://github.com/Mudavath-Giri-Naik/Tally.git",
+    live: "https://tally-chi-steel.vercel.app",
+    accent: "#0f766e",
+    gradient: "linear-gradient(140deg,#ccfbf1 0%,#5eead4 50%,#2dd4bf 100%)",
+    ink: "#115e59",
+    tags: ["AI Agent", "For Merchants"],
+    dA: SVG.chat, dB: SVG.pulse, misc: SVG.m2, underline: SVG.u3,
+  },
+  {
+    name: "Mandate", tagline: "Race-Proof Storefront",
+    category: "Full Stack", year: "2026", platform: "web",
+    description: "A single-product checkout storefront with atomic Postgres stock reservations and real Razorpay payments — the race-proof foundation for an upcoming AI commerce agent layer.",
+    github: "https://github.com/Mudavath-Giri-Naik/Mandate.git",
+    live: "https://mandate-theta-two.vercel.app",
+    accent: "#4338ca",
+    gradient: "linear-gradient(140deg,#e0e7ff 0%,#a5b4fc 50%,#818cf8 100%)",
+    ink: "#3730a3",
+    tags: ["Full Stack", "For Shoppers"],
+    dA: SVG.circle, dB: SVG.braces, misc: SVG.m4, underline: SVG.u7,
+  },
+  {
+    name: "Parley", tagline: "AI Seller Agent for MCP",
+    category: "AI Agent", year: "2026", platform: "web",
+    description: "Turns a store's existing APIs into an AI seller agent — any MCP client, Claude, ChatGPT, or Gemini, can browse, negotiate, and buy within limits enforced in code. Self-hostable, fully audited.",
+    github: "https://github.com/Mudavath-Giri-Naik/Parley.git",
+    live: "https://parley-rosy.vercel.app",
+    accent: "#a21caf",
+    gradient: "linear-gradient(140deg,#fae8ff 0%,#f0abfc 50%,#e879f9 100%)",
+    ink: "#86198f",
+    tags: ["AI Agent", "For Sellers"],
+    dA: SVG.swirl6, dB: SVG.arrow7, misc: SVG.m6, underline: SVG.u9,
+  },
+  {
     name: "SeatFlow", tagline: "Real-Time Booking Engine",
     category: "Full Stack", year: "2026", platform: "web",
     description: "A real-time seat booking system built for zero double-bookings — Redis locks, Postgres row-locking, WebSocket live updates, and full CI/CD.",
@@ -345,9 +381,9 @@ const ProjectsSection: React.FC = () => {
           padding: 40px 24px 64px;
           font-family: 'Inter', -apple-system, sans-serif;
           position: relative; width: 100%;
-          max-width: 1120px; margin: 96px auto 0;
+          margin: 96px auto 0;
         }
-        .psection__inner { max-width: 940px; margin: 0 auto; }
+        .psection__inner { max-width: 940px; margin: 0 auto; position: relative; z-index: 2; }
 
         /* header */
         .psection__hd { text-align: center; margin-bottom: 42px; }
