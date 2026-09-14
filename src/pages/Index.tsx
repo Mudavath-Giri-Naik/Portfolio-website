@@ -13,7 +13,7 @@ const Index = () => {
         <DotBackground>
           <Header />
           {/* Mobile-only spacer below fixed navbar */}
-          <div className="h-14 md:hidden" />
+          <div className="h-11 md:hidden" />
           <HeroSection />
         </DotBackground>
       </GridBackground>
