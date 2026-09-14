@@ -9,11 +9,11 @@ import { DotBackground } from "@/components/DotBackground";
 const Index = () => {
   return (
     <div className="min-h-screen bg-background">
-      <Header />
-      {/* Mobile-only spacer below fixed navbar */}
-      <div className="h-10 md:hidden" />
       <GridBackground>
         <DotBackground>
+          <Header />
+          {/* Mobile-only spacer below fixed navbar */}
+          <div className="h-14 md:hidden" />
           <HeroSection />
         </DotBackground>
       </GridBackground>

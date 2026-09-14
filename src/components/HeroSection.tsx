@@ -25,49 +25,17 @@ const HeroSection = () => {
       href: "mailto:yourgirinaik@gmail.com",
     },
     {
-      type: "kaggle",
-      title: "Kaggle",
-      iconPath: "/kaggle.png",
-      href: "https://www.kaggle.com/girish1133",
-    },
-    {
-      type: "huggingface",
-      title: "Hugging Face",
-      iconPath: "/hug.png",
-      href: "https://huggingface.co/GiriNaik",
-    },
-    {
       type: "leetcode",
       title: "LeetCode",
       iconPath: "/leetcode.png",
       href: "https://leetcode.com/u/Mudavathgirinaik/",
-    },
-    {
-      type: "vercel",
-      title: "Vercel",
-      iconPath: "/vercel.png",
-      href: "https://vercel.com/giri-naiks-projects-9e92c779",
-    },
-
-
-    {
-      type: "twitter",
-      title: "Twitter",
-      iconPath: "/twitter.png",
-      href: "https://x.com/giri_nayakh",
-    },
-    {
-      type: "researchgate",
-      title: "ResearchGate",
-      iconPath: "/researchgate.png",
-      href: "https://www.researchgate.net/profile/Giri-Naik-2?ev=hdr_xprf",
     },
   ];
 
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-8 md:pt-28 lg:pt-32 px-4 pb-24 md:pb-32">
       {/* Background Text - behind image */}
-      <BackgroundLines className="absolute inset-0 z-0 pointer-events-none select-none -mt-24 md:-mt-8 lg:mt-0">
+      <BackgroundLines className="absolute inset-0 z-0 pointer-events-none select-none -mt-40 md:-mt-8 lg:mt-0">
         <div className="flex flex-col items-center justify-center px-2 h-full pt-0 -mt-10 md:pt-48 lg:pt-60">
           <h1 className="text-[4rem] sm:text-[6rem] md:text-[10rem] lg:text-[14rem] font-black leading-none tracking-tight text-hero-primary text-center dark:font-extrabold dark:tracking-[-0.02em]">
             Student
@@ -81,7 +49,7 @@ const HeroSection = () => {
       {/* Text Content Section - Top */}
       <div className="relative z-20 w-full max-w-7xl mx-auto px-4">
         {/* First Paragraph - above image (all screens) */}
-        <div className="flex flex-col items-center justify-center w-full max-w-4xl mx-auto -mt-8 md:mt-0 mb-2 md:mb-3">
+        <div className="flex flex-col items-center justify-center w-full max-w-4xl mx-auto mt-0 md:mt-0 mb-2 md:mb-3">
           <p className="text-sm md:text-base lg:text-lg text-foreground leading-relaxed text-center">
             Final Year{" "}
             <Highlighter action="underline" color="#ff0022">
@@ -186,22 +154,25 @@ const HeroSection = () => {
             <Highlighter action="highlight" color="#16a34a">
               <span className="font-bold">  contributions  </span>
             </Highlighter>
-            {", "}
+            <span className="hidden md:inline">{", "}</span>
+            <span className="md:hidden">.</span>
           </span>
-          <span>
-            <Highlighter action="highlight" color="#2563eb">
-              <span className="font-bold">  docs-first development  </span>
-            </Highlighter>
-            {", "}and{" "}
-            <Highlighter action="underline" color="#dc2626">
-              <span className="font-bold text-black dark:text-black">  hands-on  </span>
-            </Highlighter>
-          </span>
-          <span>
-            <Highlighter action="underline" color="#dc2626">
-              <span className="font-bold text-black dark:text-black">  system building  </span>
-            </Highlighter>
-            .
+          <span className="hidden md:contents">
+            <span>
+              <Highlighter action="highlight" color="#2563eb">
+                <span className="font-bold">  docs-first development  </span>
+              </Highlighter>
+              {", "}and{" "}
+              <Highlighter action="underline" color="#dc2626">
+                <span className="font-bold text-black dark:text-black">  hands-on  </span>
+              </Highlighter>
+            </span>
+            <span>
+              <Highlighter action="underline" color="#dc2626">
+                <span className="font-bold text-black dark:text-black">  system building  </span>
+              </Highlighter>
+              .
+            </span>
           </span>
         </div>
       </div>
@@ -211,13 +182,7 @@ const HeroSection = () => {
         <SocialIcon type="github" url="https://github.com/Mudavath-Giri-Naik" />
         <SocialIcon type="linkedin" url="https://www.linkedin.com/in/giri-naik/" />
         <SocialIcon type="email" url="https://example.com/email" />
-        <SocialIcon type="kaggle" url="https://example.com/kaggle" />
-        <SocialIcon type="huggingface" url="https://example.com/huggingface" />
         <SocialIcon type="leetcode" url="https://leetcode.com/u/Mudavathgirinaik/" />
-        <SocialIcon type="vercel" url="https://example.com/vercel" />
-        <SocialIcon type="render" url="https://example.com/render" />
-        <SocialIcon type="twitter" url="https://example.com/twitter" />
-        <SocialIcon type="researchgate" url="https://example.com/researchgate" />
       </div>
 
       {/* Social Icons - Desktop (Magic UI Dock) */}
