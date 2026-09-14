@@ -95,6 +95,17 @@ const Header = () => {
           borderRadius: "0 2px 2px 0",
         }}
       />
+
+      {/* Mobile Menu Backdrop Blur - kept outside <header> since its translate-y transform
+          would otherwise become the containing block for a fixed child, clipping the blur
+          to the header's own box instead of the full viewport */}
+      {mobileMenuOpen && (
+        <div
+          className="fixed inset-0 z-30 backdrop-blur-sm bg-background/30 md:hidden"
+          onClick={() => setMobileMenuOpen(false)}
+        />
+      )}
+
       <header
       className={cn(
         "fixed top-0 left-0 right-0 z-40 flex items-center justify-between py-4 px-4 md:px-6 md:pointer-events-none transition-transform duration-300 ease-in-out",
@@ -140,7 +151,7 @@ const Header = () => {
 
       {/* Mobile Navigation */}
       {mobileMenuOpen && (
-        <nav className="absolute top-full left-4 right-4 mt-2 flex flex-col items-center gap-2 bg-background rounded-2xl px-6 py-4 shadow-lg border border-border md:hidden animate-fade-in">
+        <nav className="absolute top-full left-4 right-4 mt-2 flex flex-col items-center gap-2 bg-background rounded-2xl px-6 py-4 shadow-lg border border-border md:hidden animate-fade-in z-40">
           {navItems.map((item) => (
             <CoolMode key={item.name + "-mobile"}>
               <a

@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef } from "react";
 import { annotate } from "rough-notation";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface HighlighterProps {
   children: React.ReactNode;
@@ -63,14 +64,18 @@ export function Highlighter({
 }: HighlighterProps) {
   const elementRef = useRef<HTMLElement>(null);
   const annotationRef = useRef<any>(null);
-  const isDark = isDarkColor(color);
+  const isMobile = useIsMobile();
+
+  // On mobile, swap solid highlight backgrounds for underlines (same color) so text stays readable
+  const requestedType = (type || action) as HighlighterProps["action"];
+  const effectiveType = isMobile && requestedType === "highlight" ? "underline" : requestedType;
+  const isDark = effectiveType === "highlight" && isDarkColor(color);
 
   useEffect(() => {
     if (!elementRef.current) return;
 
-    const annotationType = type || action;
     const annotation = annotate(elementRef.current, {
-      type: annotationType as any,
+      type: effectiveType as any,
       color: color,
       strokeWidth: strokeWidth,
       padding: padding,
@@ -87,7 +92,7 @@ export function Highlighter({
         annotationRef.current.remove();
       }
     };
-  }, [color, action, type, strokeWidth, padding, multiline, animate, animationDuration]);
+  }, [color, effectiveType, strokeWidth, padding, multiline, animate, animationDuration]);
 
   return (
     <span 

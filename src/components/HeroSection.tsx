@@ -35,7 +35,7 @@ const HeroSection = () => {
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-8 md:pt-28 lg:pt-32 px-4 pb-24 md:pb-32">
       {/* Background Text - behind image */}
-      <BackgroundLines className="absolute inset-0 z-0 pointer-events-none select-none -mt-40 md:-mt-8 lg:mt-0">
+      <BackgroundLines className="absolute inset-0 z-0 pointer-events-none select-none -mt-32 md:-mt-8 lg:mt-0">
         <div className="flex flex-col items-center justify-center px-2 h-full pt-0 -mt-10 md:pt-48 lg:pt-60">
           <h1 className="text-[4rem] sm:text-[6rem] md:text-[10rem] lg:text-[14rem] font-black leading-none tracking-tight text-hero-primary text-center dark:font-extrabold dark:tracking-[-0.02em]">
             Student
@@ -97,8 +97,8 @@ const HeroSection = () => {
             <p className="text-base lg:text-lg text-foreground leading-relaxed text-right">
               <span className="whitespace-nowrap">
                 Learning in public through{" "}
-                <Highlighter action="highlight" color="#16a34a">
-                  <span className="font-bold">  open-source contributions  </span>
+                <Highlighter action="underline" color="#16a34a">
+                  <span className="font-bold text-black dark:text-black">  open-source contributions  </span>
                 </Highlighter>
               </span>
               {", "}
@@ -146,13 +146,13 @@ const HeroSection = () => {
         <div className="text-sm md:text-base text-foreground leading-relaxed text-center flex flex-col">
           <span>
             Learning in public through{" "}
-            <Highlighter action="highlight" color="#16a34a">
-              <span className="font-bold">  open-source  </span>
+            <Highlighter action="underline" color="#16a34a">
+              <span className="font-bold text-black dark:text-black">  open-source  </span>
             </Highlighter>
           </span>
           <span>
-            <Highlighter action="highlight" color="#16a34a">
-              <span className="font-bold">  contributions  </span>
+            <Highlighter action="underline" color="#16a34a">
+              <span className="font-bold text-black dark:text-black">  contributions  </span>
             </Highlighter>
             <span className="hidden md:inline">{", "}</span>
             <span className="md:hidden">.</span>
@@ -178,7 +178,7 @@ const HeroSection = () => {
       </div>
 
       {/* Social Icons - Mobile (original layout) */}
-      <div className="relative z-30 flex items-center justify-center flex-wrap gap-3 md:gap-4 mt-8 px-4 md:hidden">
+      <div className="relative z-30 flex items-center justify-center flex-wrap gap-3 md:gap-4 mt-12 px-4 md:hidden">
         <SocialIcon type="github" url="https://github.com/Mudavath-Giri-Naik" />
         <SocialIcon type="linkedin" url="https://www.linkedin.com/in/giri-naik/" />
         <SocialIcon type="email" url="https://example.com/email" />
