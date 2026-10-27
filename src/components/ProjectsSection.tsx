@@ -246,9 +246,11 @@ const ProjectCard: React.FC<{ project: Project; index: number }> = ({ project, i
     >
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 44 }}
-      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 44 }}
-      transition={{ duration: 0.65, delay: (index % 3) * 0.08, ease: [0.22, 1, 0.36, 1] }}
+      initial={{ opacity: 0, y: 56, scale: 0.94, filter: "blur(10px)" }}
+      animate={inView ? { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" } : { opacity: 0, y: 56, scale: 0.94, filter: "blur(10px)" }}
+      whileHover={{ y: -6 }}
+      whileTap={{ scale: 0.985 }}
+      transition={{ duration: 0.8, delay: (index % 3) * 0.1, ease: [0.22, 1, 0.36, 1] }}
       className="pcard"
       style={{ "--accent": project.accent, "--grad": project.gradient, "--ink": project.ink } as React.CSSProperties}
     >

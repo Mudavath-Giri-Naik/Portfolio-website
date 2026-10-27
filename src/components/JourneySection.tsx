@@ -1,5 +1,5 @@
-import React, { useRef } from "react";
-import { motion, useInView } from "motion/react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion, useInView, useReducedMotion } from "motion/react";
 import {
   IconSchool,
   IconTrophy,
@@ -106,115 +106,45 @@ const Doodle: React.FC<{ src: string; className?: string; style?: React.CSSPrope
   <span aria-hidden="true" className={`doodle ${className || ""}`} style={{ ["--m" as string]: `url(/svgs/${src})`, ...style }} />
 );
 
-/* ─── Event image card ─── */
-const EventCard: React.FC<{ ev: JEvent }> = ({ ev }) => {
-  const m = typeMeta[ev.type];
-  return (
-    <div className={`evcard ${ev.upcoming ? "is-upcoming" : ""}`}>
-      <div className="evcard__frame">
-        <img src={ev.img} alt={ev.title} loading="lazy" />
-        <span className="evcard__badge" style={{ color: m.color, background: m.light }}>
-          {m.icon}
-        </span>
-      </div>
-      <h4 className="evcard__title">{ev.title}</h4>
-      <span className="evcard__month">{ev.month}</span>
-    </div>
-  );
-};
+/* ─── Flatten every year into one chronological slide list ─── */
+type Slide = JEvent & { year: Year };
+const slides: Slide[] = years.flatMap((y) => y.events.map((e) => ({ ...e, year: y })));
 
-/* ─── Vertical connector between year bands ─── */
-const VerticalConnector: React.FC<{ from: string; to: string; idx: number }> = ({ from, to, idx }) => {
-  const gid = `jvc${idx}`;
-  return (
-    <div className="jconn" aria-hidden="true">
-      <svg width="180" height="50" viewBox="0 0 180 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id={gid} x1="0" y1="0" x2="0" y2="80" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stopColor={from} stopOpacity="0.55" />
-            <stop offset="100%" stopColor={to} stopOpacity="0.55" />
-          </linearGradient>
-        </defs>
-        {/* Main S-curve */}
-        <path d="M 90 0 C 28 26, 152 54, 90 80"
-              stroke={`url(#${gid})`} strokeWidth="1.6"
-              strokeDasharray="5 4.5" strokeLinecap="round" />
-        {/* Ghost echo curve for depth */}
-        <path d="M 78 1 C 20 26, 140 54, 80 79"
-              stroke={from} strokeWidth="0.8" opacity="0.13"
-              strokeDasharray="3 7" strokeLinecap="round" />
-        {/* Top dot */}
-        <circle cx="90" cy="5" r="5" fill={from} opacity="0.18" />
-        <circle cx="90" cy="5" r="2.5" fill={from} opacity="0.65" />
-        {/* Diamond ornament at midpoint */}
-        <g transform="translate(90 40)">
-          <path d="M 0 -8 L 7 0 L 0 8 L -7 0 Z" fill={from} opacity="0.1" />
-          <path d="M 0 -8 L 7 0 L 0 8 L -7 0 Z" stroke={to} strokeWidth="1.1" opacity="0.35" fill="none" />
-          <circle r="3" fill="white" />
-          <circle r="1.8" fill={to} opacity="0.7" />
-        </g>
-        {/* Small waypoint pips */}
-        <circle cx="64" cy="22" r="2" fill={from} opacity="0.3" />
-        <circle cx="116" cy="58" r="2" fill={to} opacity="0.3" />
-        {/* Bottom dot */}
-        <circle cx="90" cy="75" r="5" fill={to} opacity="0.18" />
-        <circle cx="90" cy="75" r="2.5" fill={to} opacity="0.65" />
-      </svg>
-    </div>
-  );
-};
-
-/* ─── Year chapter ─── */
-const Chapter: React.FC<{ year: Year; index: number; last: boolean; nextAccent?: string }> = ({ year, index, last, nextAccent }) => {
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-70px" });
-
-  return (
-    <>
-      <motion.div
-        ref={ref}
-        initial={{ opacity: 0, y: 36 }}
-        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 36 }}
-        transition={{ duration: 0.55, delay: index * 0.04, ease: [0.22, 1, 0.36, 1] }}
-        className="jband"
-        style={{ "--accent": year.accent, background: year.tint } as React.CSSProperties}
-      >
-        <Doodle src={year.deco} className="jband__deco" style={{ color: year.accent }} />
-        <img src={`/stickers/${year.sticker}`} alt="" aria-hidden="true" className="jband__sticker" />
-
-        <div className="jband__head">
-          <span className="jband__num">
-            {year.no}
-            <Doodle src="Highlight_09.svg" className="jband__num-ring" style={{ color: year.accent }} />
-          </span>
-          <div className="jband__titles">
-            <div className="jband__title-row">
-              <h3 className="jband__title">{year.label}</h3>
-              <span className={`jband__status ${year.status === "current" ? "is-now" : "is-done"}`}>
-                {year.status === "current" ? "in progress" : "done"}
-              </span>
-            </div>
-            <span className="jband__hand">{year.hand}</span>
-          </div>
-          <span className="jband__range">{year.range}</span>
-        </div>
-
-        <div className="jgrid">
-          {year.events.map((ev) => (
-            <EventCard key={ev.title} ev={ev} />
-          ))}
-        </div>
-      </motion.div>
-
-      {!last && nextAccent && (
-        <VerticalConnector from={year.accent} to={nextAccent} idx={index} />
-      )}
-    </>
-  );
-};
+const INTERVAL = 2000;
+const EASE = [0.22, 1, 0.36, 1] as const;
 
 /* ─── Section ─── */
 const JourneySection: React.FC = () => {
+  const boxRef = useRef<HTMLDivElement>(null);
+  const inView = useInView(boxRef, { margin: "-15% 0px -15% 0px" });
+  const reduce = useReducedMotion();
+
+  const [[index, dir], setPage] = useState<[number, number]>([0, 1]);
+  const [hovered, setHovered] = useState(false);
+
+  const paginate = useCallback((d: number) => {
+    setPage(([i]) => [(i + d + slides.length) % slides.length, d]);
+  }, []);
+
+  const playing = inView && !hovered && !reduce;
+
+  useEffect(() => {
+    if (!playing) return;
+    const t = window.setTimeout(() => paginate(1), INTERVAL);
+    return () => window.clearTimeout(t);
+  }, [playing, index, paginate]);
+
+  // Warm the cache so slides never pop in
+  useEffect(() => {
+    slides.forEach((s) => {
+      const img = new Image();
+      img.src = s.img;
+    });
+  }, []);
+
+  const slide = slides[index];
+  const accent = slide.year.accent;
+
   return (
     <section id="journey" className="jsection">
       <img src="/stickers/5.svg" alt="" aria-hidden="true" className="jsection__sticker jsection__sticker--1" />
@@ -222,10 +152,10 @@ const JourneySection: React.FC = () => {
 
       <div className="jsection__inner">
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, y: 24, filter: "blur(8px)" }}
+          whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.8, ease: EASE }}
           className="jsection__header"
         >
           <h2 className="jsection__title">
@@ -237,9 +167,87 @@ const JourneySection: React.FC = () => {
           </p>
         </motion.div>
 
-        {years.map((y, i) => (
-          <Chapter key={y.label} year={y} index={i} last={i === years.length - 1} nextAccent={years[i + 1]?.accent} />
-        ))}
+        <motion.div
+          ref={boxRef}
+          initial={{ opacity: 0, y: 56, scale: 0.96, filter: "blur(10px)" }}
+          whileInView={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.9, ease: EASE }}
+          className="jbox"
+          style={{ "--accent": accent } as React.CSSProperties}
+          onMouseEnter={() => setHovered(true)}
+          onMouseLeave={() => setHovered(false)}
+          role="region"
+          aria-roledescription="carousel"
+          aria-label="B.Tech journey slideshow"
+        >
+          {/* ambient accent glow that follows the current slide */}
+          <motion.div
+            aria-hidden="true"
+            className="jbox__glow"
+            animate={{ background: `radial-gradient(60% 80% at 20% 0%, ${accent}33 0%, transparent 70%)` }}
+            transition={{ duration: 0.8 }}
+          />
+
+          <div className="jbox__stage">
+            <AnimatePresence initial={false} custom={dir} mode="popLayout">
+              <motion.div
+                key={index}
+                custom={dir}
+                className="jbox__photo"
+                variants={{
+                  enter: (d: number) => ({ opacity: 0, x: d * 60, scale: 1.04 }),
+                  center: { opacity: 1, x: 0, scale: 1 },
+                  exit: (d: number) => ({ opacity: 0, x: d * -60, scale: 0.97 }),
+                }}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={{ duration: 0.65, ease: EASE }}
+                drag="x"
+                dragConstraints={{ left: 0, right: 0 }}
+                dragElastic={0.25}
+                onDragEnd={(_, info) => {
+                  if (info.offset.x < -50) paginate(1);
+                  else if (info.offset.x > 50) paginate(-1);
+                }}
+              >
+                <motion.img
+                  src={slide.img}
+                  alt={slide.title}
+                  draggable={false}
+                  initial={{ scale: 1.08 }}
+                  animate={{ scale: 1 }}
+                  transition={{ duration: 2.6, ease: "easeOut" }}
+                />
+              </motion.div>
+            </AnimatePresence>
+
+            {/* caption — bottom of the photo */}
+            <div className="jbox__cap">
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.35, ease: EASE }}
+                  className="jbox__text"
+                  aria-live="polite"
+                >
+                  <h3 className="jbox__title">{slide.title}</h3>
+                  <span className="jbox__meta">
+                    <span>{slide.month}</span>
+                    <i aria-hidden="true" />
+                    <span className="jbox__hand">{slide.year.hand}</span>
+                  </span>
+                </motion.div>
+              </AnimatePresence>
+
+            </div>
+          </div>
+
+        </motion.div>
       </div>
 
       <style>{`
@@ -263,7 +271,6 @@ const JourneySection: React.FC = () => {
         .jsection__sticker--1 { width: 40px; top: 60px; left: 4%; transform: rotate(-12deg); }
         .jsection__sticker--2 { width: 52px; bottom: 8%; right: 3%; transform: rotate(10deg); }
 
-        /* Header */
         .jsection__header { text-align: center; margin-bottom: 40px; }
         .jsection__title {
           position: relative; display: inline-block;
@@ -274,127 +281,65 @@ const JourneySection: React.FC = () => {
         .jsection__subtitle { font-size: 15px; color: #71717a; margin: 28px auto 0; line-height: 1.6; max-width: 460px; }
         .jsection__subtitle strong { color: #18181b; font-weight: 700; }
 
-        /* Year band */
-        .jband {
-          position: relative; border-radius: 26px;
-          padding: 22px 26px 26px; margin-bottom: 0; overflow: hidden;
+        /* ── The one box ── */
+        .jbox {
+          position: relative; overflow: hidden;
+          border-radius: 28px; padding: 18px;
+          background: #fff;
+          border: 1px solid #ececf1;
+          box-shadow: 0 30px 70px -30px rgba(24,24,27,0.28), 0 4px 14px -6px rgba(24,24,27,0.08);
         }
-        .jband__deco { position: absolute; top: -16px; right: -12px; width: 120px; height: 120px; opacity: 0.07; transform: rotate(12deg); }
-        .jband__sticker { position: absolute; top: 14px; right: 16px; width: 42px; z-index: 1; transform: rotate(8deg); opacity: 0.95; }
-
-        .jband__head { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; flex-wrap: wrap; position: relative; z-index: 2; }
-        .jband__num {
-          position: relative; flex-shrink: 0; width: 46px; height: 46px;
-          display: flex; align-items: center; justify-content: center;
-          font-family: 'Dancing Script', cursive; font-size: 38px; font-weight: 700; color: var(--accent);
+        .jbox__glow { position: absolute; inset: 0; pointer-events: none; }
+        .jbox__stage {
+          position: relative; z-index: 1; overflow: hidden;
+          aspect-ratio: 16 / 9; border-radius: 20px;
+          background: #f1f1f4;
+          box-shadow: 0 0 0 1px rgba(24,24,27,0.06);
         }
-        .jband__num-ring { position: absolute; inset: -12px -9px -10px -10px; width: auto; height: auto; opacity: 0.7; }
-        .jband__titles { position: relative; }
-        .jband__title-row { display: flex; align-items: center; gap: 10px; }
-        .jband__title { margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.03em; color: #18181b; }
-        .jband__status { font-family: 'Dancing Script', cursive; font-size: 16px; font-weight: 600; transform: rotate(-4deg); }
-        .jband__status.is-done { color: #16a34a; }
-        .jband__status.is-now { color: #ea580c; }
-        .jband__hand { display: block; font-family: 'Dancing Script', cursive; font-size: 17px; color: #9a9aa2; margin-top: -1px; }
-        .jband__range {
-          margin-left: auto; font-size: 12px; font-weight: 700; color: var(--accent);
-          background: rgba(255,255,255,0.75); padding: 6px 12px; border-radius: 999px;
-          font-variant-numeric: tabular-nums;
+        .jbox__photo { position: absolute; inset: 0; cursor: grab; touch-action: pan-y; }
+        .jbox__photo:active { cursor: grabbing; }
+        .jbox__photo img {
+          width: 100%; height: 100%; object-fit: cover; display: block;
+          user-select: none; -webkit-user-drag: none;
         }
-
-        /* Event grid */
-        .jgrid {
-          display: flex; flex-wrap: nowrap; gap: 16px;
-          overflow-x: auto; position: relative; z-index: 2;
-          scrollbar-width: none; -ms-overflow-style: none;
-          scroll-snap-type: x mandatory;
-          -webkit-overflow-scrolling: touch;
-          overscroll-behavior-x: contain;
+        .jbox__stage::after {
+          content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 2;
+          background: linear-gradient(180deg, rgba(0,0,0,0.22) 0%, transparent 22%, transparent 42%, rgba(8,8,14,0.86) 100%);
         }
-        .jgrid::-webkit-scrollbar { display: none; }
-
-        /* ── Horizontal timeline line ── */
-        .jgrid::before {
-          content: '';
-          position: absolute;
-          left: 0; right: 0; top: 10px;
-          height: 1.5px;
-          background: linear-gradient(90deg,
-            transparent 0px,
-            var(--accent) 30px,
-            var(--accent) calc(100% - 30px),
-            transparent 100%);
-          opacity: 0.2;
-          pointer-events: none;
-          z-index: 0;
+        .jbox__cap {
+          position: absolute; left: 0; right: 0; bottom: 0; z-index: 3;
+          display: flex; align-items: flex-end; justify-content: space-between; gap: 16px;
+          padding: 24px 22px 20px; pointer-events: none;
         }
-
-        .evcard {
-          flex: 0 0 calc(25% - 12px); min-width: 130px;
-          display: flex; flex-direction: column;
-          scroll-snap-align: start;
-          position: relative;
-          padding-top: 22px;
+        .jbox__cap > * { pointer-events: auto; }
+        .jbox__text { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; min-width: 0; }
+        .jbox__year {
+          display: inline-flex; align-items: center; gap: 8px;
+          font-size: 12px; font-weight: 700; color: #fff;
+          background: rgba(255,255,255,0.16); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+          border: 1px solid rgba(255,255,255,0.28);
+          padding: 4px 12px 4px 4px; border-radius: 999px;
         }
-
-        /* ── Timeline dot per card ── */
-        .evcard::after {
-          content: '';
-          position: absolute;
-          top: 4px; left: 50%;
-          transform: translateX(-50%);
-          width: 12px; height: 12px;
-          border-radius: 50%;
-          background: var(--accent);
-          border: 2.5px solid rgba(255,255,255,0.95);
-          box-shadow: 0 0 0 3.5px color-mix(in srgb, var(--accent) 22%, transparent);
-          opacity: 0.72;
-          z-index: 3;
-        }
-
-        /* professional matte frame */
-        .evcard__frame {
-          position: relative;
-          background: #ffffff;
-          padding: 5px;
-          border-radius: 14px;
-          border: 1px solid #e7e7ec;
-          box-shadow: 0 5px 16px -8px rgba(24,24,27,0.22);
-          transition: transform 0.3s cubic-bezier(0.22,1,0.36,1), box-shadow 0.3s ease;
-        }
-        .evcard__frame:hover {
-          transform: translateY(-4px);
-          box-shadow: 0 12px 26px -10px rgba(24,24,27,0.3);
-        }
-        .evcard__frame img {
-          display: block; width: 100%; aspect-ratio: 3 / 2;
-          object-fit: cover; border-radius: 10px; background: #f1f1f4;
-        }
-        .is-upcoming .evcard__frame { border-style: dashed; }
-        .is-upcoming .evcard__frame img { opacity: 0.72; filter: grayscale(0.15); }
-        .evcard__badge {
-          position: absolute; top: 11px; left: 11px;
-          width: 24px; height: 24px; border-radius: 8px;
+        .jbox__yearno {
+          width: 22px; height: 22px; border-radius: 50%;
           display: grid; place-items: center;
-          border: 1.5px solid #fff;
-          box-shadow: 0 1px 4px rgba(0,0,0,0.14);
+          background: var(--accent); color: #fff; font-size: 11px;
         }
-        .evcard__title { margin: 11px 2px 0; font-size: 13.5px; font-weight: 750; letter-spacing: -0.01em; color: #18181b; line-height: 1.25; }
-        .evcard__month { margin: 3px 2px 0; font-size: 11px; font-weight: 600; color: #8a8a93; font-variant-numeric: tabular-nums; }
+        .jbox__title {
+          margin: 0; font-size: clamp(22px, 3.4vw, 36px);
+          font-weight: 800; letter-spacing: -0.035em; line-height: 1.1; color: #fff;
+          text-wrap: balance; text-shadow: 0 2px 14px rgba(0,0,0,0.35);
+        }
+        .jbox__meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 14px; font-weight: 600; color: rgba(255,255,255,0.85); font-variant-numeric: tabular-nums; }
+        .jbox__meta i { width: 4px; height: 4px; border-radius: 50%; background: rgba(255,255,255,0.6); }
+        .jbox__hand { font-family: 'Dancing Script', cursive; font-size: 20px; font-weight: 600; color: #fff; }
 
-        /* ── Vertical connector ── */
-        .jconn {
-          display: flex; justify-content: center; align-items: center;
-          margin: -4px 0 -4px;
-        }
 
         /* ── Tablet ── */
         @media (min-width: 640px) and (max-width: 1023px) {
           .jsection { padding: 30px 22px 56px; }
           .jsection__title { font-size: 36px; }
-          .jband { padding: 20px 20px 24px; }
-          .jgrid { gap: 14px; }
-          .evcard { flex: 0 0 calc(33.333% - 10px); }
+          .jbox__stage { aspect-ratio: 3 / 2; }
         }
 
         /* ── Mobile ── */
@@ -405,20 +350,12 @@ const JourneySection: React.FC = () => {
           .jsection__title { font-size: 31px; }
           .jsection__subtitle { font-size: 14px; margin-top: 24px; }
 
-          .jband { padding: 20px 16px 22px; border-radius: 22px; }
-          .jband__head { gap: 11px; margin-bottom: 16px; }
-          .jband__num { width: 42px; height: 42px; font-size: 32px; }
-          .jband__title { font-size: 20px; }
-          .jband__range { margin-left: 0; }
-          .jband__sticker { width: 36px; top: 12px; right: 12px; }
-
-          .jgrid { flex-wrap: wrap; gap: 13px; }
-          .jgrid::before { display: none; }
-          .evcard { flex: 0 0 calc(50% - 7px); min-width: 0; padding-top: 0; }
-          .evcard::after { display: none; }
-          .evcard__title { font-size: 13px; }
-          .jconn svg { width: 100px; height: 38px; }
+          .jbox { border-radius: 22px; padding: 10px; }
+          .jbox__stage { border-radius: 16px; aspect-ratio: 4 / 5; }
+          .jbox__cap { flex-direction: column; align-items: stretch; gap: 14px; padding: 18px 16px 16px; }
+          .jbox__title { font-size: 24px; }
         }
+
       `}</style>
     </section>
   );

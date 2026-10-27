@@ -3,6 +3,16 @@ import { Dock, DockIcon } from "@/components/ui/dock";
 import { Highlighter } from "@/components/ui/highlighter";
 import { BackgroundLines } from "@/components/ui/background-lines";
 import SocialIcon from "./SocialIcon";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "motion/react";
+import { GravityStarsBackground } from "@/components/animate-ui/backgrounds/gravity-stars";
+
+const EASE = [0.22, 1, 0.36, 1] as const;
+const rise = (delay: number) => ({
+  initial: { opacity: 0, y: 30, filter: "blur(8px)" },
+  animate: { opacity: 1, y: 0, filter: "blur(0px)" },
+  transition: { duration: 0.9, delay, ease: EASE },
+});
 
 const HeroSection = () => {
   const socialIcons = [
@@ -32,9 +42,28 @@ const HeroSection = () => {
     },
   ];
 
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end start"] });
+  const imageY = useTransform(scrollYProgress, [0, 1], ["0%", "14%"]);
+  const imageScale = useTransform(scrollYProgress, [0, 1], [1, 1.06]);
+  const bgTextY = useTransform(scrollYProgress, [0, 1], ["0%", "-18%"]);
+  const bgTextOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0.2]);
+
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-8 md:pt-28 lg:pt-32 px-4 pb-24 md:pb-32">
+    <section ref={sectionRef} className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-8 md:pt-28 lg:pt-32 px-4 pb-24 md:pb-32">
+      {/* Drifting stars */}
+      <GravityStarsBackground
+        className="absolute inset-0 z-0 text-blue-500/80 pointer-events-none"
+        starsCount={55}
+        starsSize={2}
+        starsOpacity={0.55}
+        glowIntensity={10}
+        movementSpeed={0.22}
+        mouseGravity="attract"
+      />
+
       {/* Background Text - behind image */}
+      <motion.div style={{ y: bgTextY, opacity: bgTextOpacity }} className="absolute inset-0 z-0 pointer-events-none">
       <BackgroundLines className="absolute inset-0 z-0 pointer-events-none select-none -mt-32 md:-mt-8 lg:mt-0">
         <div className="flex flex-col items-center justify-center px-2 h-full pt-0 -mt-10 md:pt-48 lg:pt-60">
           <h1 className="text-[4rem] sm:text-[6rem] md:text-[10rem] lg:text-[14rem] font-black leading-none tracking-tight text-hero-primary text-center dark:font-extrabold dark:tracking-[-0.02em]">
@@ -45,9 +74,10 @@ const HeroSection = () => {
           </h1>
         </div>
       </BackgroundLines>
+      </motion.div>
 
       {/* Text Content Section - Top */}
-      <div className="relative z-20 w-full max-w-7xl mx-auto px-4">
+      <motion.div {...rise(0.15)} className="relative z-20 w-full max-w-7xl mx-auto px-4">
         {/* First Paragraph - above image (all screens) */}
         <div className="flex flex-col items-center justify-center w-full max-w-4xl mx-auto mt-0 md:mt-0 mb-2 md:mb-3">
           <p className="text-sm md:text-base lg:text-lg text-foreground leading-relaxed text-center">
@@ -115,19 +145,26 @@ const HeroSection = () => {
             </p>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Developer Image - on top of background text */}
-      <div className="relative z-20 flex items-center justify-center w-full mt-4 md:-mt-12 lg:-mt-24">
-        <img
-          src={developerImage}
-          alt="Student Developer working on laptop"
-          className="h-[45vh] sm:h-[55vh] md:h-[65vh] lg:h-[75vh] object-contain"
-        />
-      </div>
+      <motion.div
+        initial={{ opacity: 0, y: 60, scale: 0.94 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 1.1, delay: 0.3, ease: EASE }}
+        className="relative z-20 flex items-center justify-center w-full mt-4 md:-mt-12 lg:-mt-24"
+      >
+        <motion.div style={{ y: imageY, scale: imageScale }} className="will-change-transform">
+          <img
+            src={developerImage}
+            alt="Student Developer working on laptop"
+            className="h-[45vh] sm:h-[55vh] md:h-[65vh] lg:h-[75vh] object-contain"
+          />
+        </motion.div>
+      </motion.div>
 
       {/* Mobile view - show paragraphs below image */}
-      <div className="lg:hidden flex flex-col items-center justify-center w-full max-w-4xl mx-auto px-4 mt-4 md:mt-6 space-y-3 md:space-y-4">
+      <motion.div {...rise(0.55)} className="lg:hidden flex flex-col items-center justify-center w-full max-w-4xl mx-auto px-4 mt-4 md:mt-6 space-y-3 md:space-y-4">
         <p className="text-sm md:text-base text-foreground leading-relaxed text-center">
           obsessed with understanding how{" "}
           <Highlighter action="highlight" color="#2563eb">
@@ -175,15 +212,34 @@ const HeroSection = () => {
             </span>
           </span>
         </div>
-      </div>
+      </motion.div>
 
       {/* Social Icons - Mobile (original layout) */}
-      <div className="relative z-30 flex items-center justify-center flex-wrap gap-3 md:gap-4 mt-12 px-4 md:hidden">
+      <motion.div {...rise(0.7)} className="relative z-30 flex items-center justify-center flex-wrap gap-3 md:gap-4 mt-12 px-4 md:hidden">
         <SocialIcon type="github" url="https://github.com/Mudavath-Giri-Naik" />
         <SocialIcon type="linkedin" url="https://www.linkedin.com/in/giri-naik/" />
         <SocialIcon type="email" url="https://example.com/email" />
         <SocialIcon type="leetcode" url="https://leetcode.com/u/Mudavathgirinaik/" />
-      </div>
+      </motion.div>
+
+      {/* Scroll cue */}
+      <motion.a
+        href="#projects"
+        aria-label="Scroll to projects"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.4, duration: 0.8 }}
+        className="hidden md:flex absolute bottom-6 left-1/2 -translate-x-1/2 z-30 flex-col items-center gap-2 text-xs font-medium tracking-widest uppercase text-muted-foreground"
+      >
+        Scroll
+        <span className="relative block w-px h-10 overflow-hidden bg-border">
+          <motion.span
+            className="absolute left-0 top-0 w-px h-4 bg-foreground"
+            animate={{ y: [-16, 40] }}
+            transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+          />
+        </span>
+      </motion.a>
 
       {/* Social Icons - Desktop (Magic UI Dock) */}
       <div className="hidden md:block">
